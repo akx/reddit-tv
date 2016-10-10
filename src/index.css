@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
+    font: 10pt "Comic Sans MS", sans-serif;
+}
+
+body, #root {
+    height: 100vh;
+}
+
+#root {
+    display: flex;
+}
+
+#player-wrap span {
+    flex: 1 1 auto;
+    flex-direction: column;
+}
+
+#control-bar {
+    background: #000;
+    color: #1695A3;
+}
+
+#control-bar button {
+    display: block;
+    width: 100%;
+    background: #225378;
+    color: #1695A3;
+    border: none;
+}

@@ -1,0 +1,58 @@
+import jsonpPromise from './jsonp-promise';
+import sample from 'lodash/sample';
+
+function getPostsFromRedditJSON(data) {
+    const postObjects = data.data.children;
+    return postObjects
+        .map((post) => post.data)
+        .map(({title, url}) => {
+            const match = (
+                /youtu\.be\/([a-zA-Z0-9_-]+)/.exec(url) ||
+                /v=([a-zA-Z0-9_-]+)/.exec(url)
+            );
+            return {
+                title,
+                url,
+                videoId: match ? match[1] : null,
+            };
+        })
+        .filter((data) => data.videoId);
+}
+
+export default class VideoManager {
+    constructor() {
+        this.posts = {};
+    }
+
+    addFromURL(url) {
+        return jsonpPromise(url).then(([data]) => {
+            return getPostsFromRedditJSON(data);
+        }).then((posts) => {
+            let nAdded = 0;
+            posts.forEach((post) => {
+                if (this.add(post)) {
+                    nAdded += 1;
+                }
+            });
+            return {url, nAdded};
+        });
+    }
+
+    add(post) {
+        if (!this.posts[post.videoId]) {
+            this.posts[post.videoId] = post;
+            return true;
+        }
+        return false;
+    }
+
+    sample() {
+        const videoId = sample(Object.keys(this.posts));
+        return this.posts[videoId];
+    }
+
+    count() {
+        return Object.keys(this.posts).length;
+    }
+
+}
