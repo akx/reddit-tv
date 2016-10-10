@@ -8,7 +8,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.videoManager = new VideoManager();
-        this.state = {nPosts: 0, current: null};
+        this.state = {nPosts: 0, nUnseenPosts: 0, current: null};
         this.goToNext = this.goToNext.bind(this);
         this.refreshPosts = this.refreshPosts.bind(this);
     }
@@ -36,7 +36,10 @@ class App extends Component {
     }
 
     recalculateNPosts() {
-        this.setState({nPosts: this.videoManager.count()})
+        this.setState({
+            nPosts: this.videoManager.count(),
+            nUnseenPosts: this.videoManager.countUnseen(),
+        });
     }
 
     componentDidUpdate() {
@@ -49,13 +52,17 @@ class App extends Component {
         for (var i = 0; i < 10; i++) {
             const newPost = this.videoManager.sample();
             if (newPost === this.state.current) continue;
+            if (newPost === null) {  // Ran out of videos? Oh no!
+                this.refreshPosts();
+            }
             this.setState({current: newPost});
+            this.recalculateNPosts();
             break;
         }
     }
 
     render() {
-        const {current, nPosts} = this.state;
+        const {current, nUnseenPosts, nPosts} = this.state;
         const yt = (current ? <YouTube
             videoId={current.videoId}
             opts={{width: '100%', height: '100%'}}
@@ -76,12 +83,12 @@ class App extends Component {
                     {yt}
                 </Box>
                 <Box id="control-bar" flex>
-                    <Box col={8}>{current ? current.title : null}</Box>
+                    <Box col={7}>{current ? current.title : null}</Box>
                     <Box col={3}>
                         <button onClick={() => this.goToNext()}>Next</button>
                     </Box>
-                    <Box col={1}>
-                        <button onClick={() => this.refreshPosts()}>Load More [{nPosts}]</button>
+                    <Box col={2}>
+                        <button onClick={() => this.refreshPosts()}>Load More [{nUnseenPosts}/{nPosts}]</button>
                     </Box>
                 </Box>
             </Flex>

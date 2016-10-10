@@ -22,6 +22,7 @@ function getPostsFromRedditJSON(data) {
 export default class VideoManager {
     constructor() {
         this.posts = {};
+        this.sampled = {};
     }
 
     addFromURL(url) {
@@ -46,13 +47,24 @@ export default class VideoManager {
         return false;
     }
 
-    sample() {
-        const videoId = sample(Object.keys(this.posts));
-        return this.posts[videoId];
+    sample(consume=true) {
+        for(var i = 0; i < 500; i++) {
+            const videoId = sample(Object.keys(this.posts));
+            if(consume && this.sampled[videoId]) {
+                continue;
+            }
+            this.sampled[videoId] = true;
+            return this.posts[videoId];
+        }
     }
 
     count() {
         return Object.keys(this.posts).length;
     }
+
+    countUnseen() {
+        return Object.keys(this.posts).filter((videoId) => !this.sampled[videoId]).length;
+    }
+
 
 }
