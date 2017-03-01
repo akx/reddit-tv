@@ -4,12 +4,12 @@
   "private": true,
   "homepage": "http://akx.github.io/reddit-tv",
   "devDependencies": {
-    "eslint": "^3.14.1",
-    "eslint-config-airbnb": "^14.0.0",
+    "eslint": "^3.16.1",
+    "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^3.0.2",
-    "eslint-plugin-react": "^6.9.0",
-    "react-scripts": "0.6.1"
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.0",
+    "react-scripts": "^0.9.3"
   },
   "dependencies": {
     "bluebird": "^3.4.6",
@@ -17,7 +17,7 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-youtube": "^7.2.0",
-    "rebass": "^0.3.3",
+    "rebass": "^0.3.4",
     "reflexbox": "^2.2.2"
   },
   "scripts": {
